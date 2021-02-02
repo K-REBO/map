@@ -79,7 +79,7 @@ impl Component for Model {
 			map: Map {
 				current_floor,
 				display_floor,
-				start : start,
+				start : Some(1),
 				goal : goal,
 			},
 		}
@@ -223,7 +223,7 @@ impl Component for Model {
 					</button>
 
 					<a class="camera_button_main" onclick=self.link.callback(|_| Msg::Test)
-						href="https://oberk.dev/map/ar"
+						href="https://map.oberk.dev/ar"
 					>
 
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 md:w-32 md:h-32" viewBox="0 0 24 24"

@@ -1,0 +1,11 @@
+{
+	"cSpell.ignoreWords": [
+		"bindgen",
+		"wasm"
+	],
+	"cSpell.words": [
+		"Linejoin",
+		"evenodd",
+		"linecap"
+	]
+}

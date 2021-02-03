@@ -86,7 +86,7 @@ impl Component for SideBar {
 					</div>
 				</div>
 				<div style="bottom: 5%; left:5%"  class="fixed">
-					<a href="https://github.com/K-REBO/AR_map">
+					<a href="https://github.com/K-REBO/map">
 						<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="height : 5rem;">
 							<title>{"GitHub icon"}</title>
 							<path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084

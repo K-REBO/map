@@ -87,3 +87,6 @@ It’s for move placeDialog to get info more.
 ## Contact Bag Question...
 Please report issue. 
 Or [email map@oberk.dev](mailto:map@oberk.dev)
+
+## License
+MIT

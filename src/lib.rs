@@ -36,6 +36,7 @@ impl Component for Model {
 
 		let (mut start, mut goal): (Option<u16>, Option<u16>) = (Some(1), Some(1));
 		let (mut current_floor, mut display_floor): (u8, u8) = (1, 1);
+
 		match storage.get_item("first").unwrap() {
 			Some(a) => {
 				if let Some(floor) = storage.get_item("current_floor").unwrap() {
@@ -44,25 +45,18 @@ impl Component for Model {
 				if let Some(floor) = storage.get_item("display_floor").unwrap() {
 					display_floor = floor.parse().unwrap();
 				}
-				let None_string: String = String::from("None");
 
-				if let Some(node) = storage.get_item("start").unwrap() {
-					match node {
-						None_string => start = None,
-						_ => {
-							start = Some(node.parse().unwrap());
-						}
-					}
-				}
-
-				if let Some(node) = storage.get_item("goal").unwrap() {
-					match node {
-						None_string => goal = None,
-						_ => {
-							goal = Some(node.parse().unwrap());
-						}
-					}
-				}
+				// if let Some(node) = storage.get_item("start").unwrap() {
+				// if let Ok(result) = node().parse() {
+				// start = result;
+				// }
+				//
+				// start = Some(node.parse().unwrap());
+				// }
+				//
+				// if let Some(node) = storage.get_item("goal").unwrap() {
+				// goal = node.parse().unwrap_or(None);
+				// }
 			}
 			None => {
 				storage.set_item("first", "Hi");
@@ -79,8 +73,8 @@ impl Component for Model {
 			map: Map {
 				current_floor,
 				display_floor,
-				start : Some(1),
-				goal : goal,
+				start: Some(1),
+				goal: None,
 			},
 		}
 	}
@@ -124,7 +118,7 @@ impl Component for Model {
 						msg = floor.to_string();
 						let storage = web_sys::window().unwrap().local_storage().unwrap().unwrap();
 						storage.set_item("display_floor", &floor.to_string());
-					},
+					}
 					None => msg = "failed to Up".into(),
 				}
 				unsafe { web_sys::console::log_1(&msg.into()) }
@@ -142,9 +136,9 @@ impl Component for Model {
 			Msg::Test => unsafe {
 				web_sys::console::log_1(&"callBacked".into());
 			},
-			Msg::CanvasClick(x,y) => {
-				unsafe{web_sys::console::log_1(&format!("x:{}, y:{}",x,y).into());}
-			}
+			Msg::CanvasClick(x, y) => unsafe {
+				web_sys::console::log_1(&format!("x:{}, y:{}", x, y).into());
+			},
 		}
 		true
 	}
@@ -238,8 +232,6 @@ impl Component for Model {
 			</div>
 		}
 	}
-
-	fn destroy(&mut self) {}
 }
 
 #[wasm_bindgen(start)]

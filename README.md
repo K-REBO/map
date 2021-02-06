@@ -1,4 +1,5 @@
 # map
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1afef2ec-ddb8-45c9-9654-f3ead83defd8/deploy-status)](https://app.netlify.com/sites/nifty-hodgkin-4b6bf3/deploys)
 <strong>[map](https://map.oberk.dev) is local map for school.</strong><br>
 Using [wasm](https://webassembly.org/)
 It’s help to find place like restroom. 

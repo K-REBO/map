@@ -1,7 +1,7 @@
 let magnification = window.innerHeight / 270;
 let debug_mode = false;
-let canvas_width = 500 * magnification;
-let canvas_height = 270 * magnification;
+let canvas_width = Math.floor(500 * magnification);
+let canvas_height = Math.floor(270 * magnification);
 let board;
 let ctx;
 let BaseFillColor = "#6B7280"
@@ -1999,6 +1999,7 @@ export function getColorByClick(x,y) {
 
 	return "red";
 }
+
 
 /*
 I don't have time to rewrite method 

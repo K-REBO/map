@@ -94,5 +94,5 @@ extern "C" {
 	fn drawNode(node: u16, color: &str);
 	fn drawRoute(route: Vec<u16>, floor: u8);
 	fn drawConnectNode(node1: u16, node2: u16);
- 	fn drawPlaceByNode(node : u16, is_goal : bool);
+	fn drawPlaceByNode(node: u16, is_goal: bool);
 }

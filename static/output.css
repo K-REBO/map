@@ -605,11 +605,6 @@ video {
   line-height: 2.25rem;
 }
 
-.text-6xl {
-  font-size: 3.75rem;
-  line-height: 1;
-}
-
 .m-5 {
   margin: 1.25rem;
 }
@@ -687,10 +682,6 @@ video {
   text-align: center;
 }
 
-.w-10 {
-  width: 2.5rem;
-}
-
 .w-12 {
   width: 3rem;
 }
@@ -705,10 +696,6 @@ video {
 
 .w-32 {
   width: 8rem;
-}
-
-.w-1\/2 {
-  width: 50%;
 }
 
 .w-1\/3 {

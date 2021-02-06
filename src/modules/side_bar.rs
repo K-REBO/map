@@ -12,7 +12,6 @@ pub struct SideBar {
 
 pub enum Msg {
 	Exit,
-	Share,
 }
 
 impl Component for SideBar {
@@ -28,10 +27,6 @@ impl Component for SideBar {
 				self.props.on_exit.emit(());
 				true
 			}
-			Msg::Share => unsafe {
-				share();
-				false
-			},
 		};
 		false
 	}
@@ -47,7 +42,7 @@ impl Component for SideBar {
 
 	fn view(&self) -> Html {
 		html! {
-			<div class="h-screen w-10 fixed" style="z-index:1000; background-color : #dfdfdf;">
+			<div class="h-screen fixed" style="z-index:1000; background-color : #dfdfdf; width: 20rem;">
 				<button onclick=self.link.callback(|_| Msg::Exit)>
 					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 md:w-32 md:h-32" viewBox="0 0 24 24"
 					fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -56,11 +51,7 @@ impl Component for SideBar {
 						<line x1="3" y1="18" x2="21" y2="18"/>
 					</svg>
 				</button>
-				<div class="flex flex-row">
-					<span class="text-6xl w-1/2 ml-10">
-						{"Title"}
-					</span>
-				</div>
+
 				<div class="flex flex-col text-3xl ml-10">
 					<div class="flex flex-row">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" class="mt-3 h-6">
@@ -69,23 +60,10 @@ impl Component for SideBar {
 						</svg>
 						<span>{"About"}</span>
 					</div>
-					<div>
-						<span>{"element2"}</span>
-					</div>
-					<div>
-						<span>{"element3"}</span>
-					</div>
-					<div>
-						<span>{"element4"}</span>
-					</div>
-					<div>
-						<span>{"element5"}</span>
-					</div>
-					<div>
-						<span>{"element6"}</span>
-					</div>
 				</div>
+
 				<div style="bottom: 5%; left:5%"  class="fixed">
+					<span>{"v0.2.1"}</span>
 					<a href="https://github.com/K-REBO/map">
 						<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="height : 5rem;">
 							<title>{"GitHub icon"}</title>
@@ -98,8 +76,4 @@ impl Component for SideBar {
 			</div>
 		}
 	}
-}
-#[wasm_bindgen(module = "/src/js/utils.js")]
-extern "C" {
-	fn share();
 }

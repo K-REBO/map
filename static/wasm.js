@@ -1,7 +1,6 @@
+import { clear_inner_by_id } from './snippets/rs_AR_Map-4f507bafade76127/inline0.js';
 import { drawRoute, drawPlaceByNode } from './snippets/rs_AR_Map-4f507bafade76127/src/js/canvas.js';
-import { clear_inner_by_id } from './snippets/rs_AR_Map-4f507bafade76127/src/js/utils.js';
 import * as __wbg_star0 from './snippets/rs_AR_Map-4f507bafade76127/src/js/canvas.js';
-import * as __wbg_star1 from './snippets/rs_AR_Map-4f507bafade76127/src/js/utils.js';
 
 let wasm;
 
@@ -308,7 +307,7 @@ async function init(input) {
     imports.wbg.__wbg_drawPlaceByNode_0bafac72448f3cf1 = function(arg0, arg1) {
         drawPlaceByNode(arg0, arg1 !== 0);
     };
-    imports.wbg.__wbg_clearinnerbyid_fc320b83cb23e20a = function(arg0, arg1) {
+    imports.wbg.__wbg_clearinnerbyid_2a89001b6307d7e4 = function(arg0, arg1) {
         try {
             clear_inner_by_id(getStringFromWasm0(arg0, arg1));
         } finally {
@@ -527,12 +526,11 @@ async function init(input) {
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_closure_wrapper353 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper350 = function(arg0, arg1, arg2) {
         var ret = makeMutClosure(arg0, arg1, 104, __wbg_adapter_16);
         return addHeapObject(ret);
     };
     imports['./snippets/rs_AR_Map-4f507bafade76127/src/js/canvas.js'] = __wbg_star0;
-    imports['./snippets/rs_AR_Map-4f507bafade76127/src/js/utils.js'] = __wbg_star1;
 
     if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
         input = fetch(input);

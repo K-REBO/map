@@ -169,11 +169,7 @@ fn view_card(card: Card) -> Html {
 	}
 }
 
-#[wasm_bindgen(inline_js = "export function clear_inner_by_id(ID) {
-	ID = String(ID);
-	let DOM = document.getElementById(ID);
-	DOM.value = \"\";
-}")]
+#[wasm_bindgen(inline_js = "export function clear_inner_by_id(ID){ID = String(ID);let DOM = document.getElementById(ID);DOM.value = \"\";}")]
 extern "C" {
 	fn clear_inner_by_id(ID: String);
 }

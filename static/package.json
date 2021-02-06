@@ -5,11 +5,11 @@
   ],
   "version": "0.1.0",
   "files": [
-    "rs_AR_Map_bg.wasm",
-    "rs_AR_Map.js",
-    "rs_AR_Map.d.ts"
+    "wasm_bg.wasm",
+    "wasm.js",
+    "wasm.d.ts"
   ],
-  "module": "rs_AR_Map.js",
-  "types": "rs_AR_Map.d.ts",
+  "module": "wasm.js",
+  "types": "wasm.d.ts",
   "sideEffects": false
 }

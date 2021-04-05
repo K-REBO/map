@@ -1,0 +1,56 @@
+body {
+	margin : 0px;
+	touch-action: manipulation;
+	/* background-color:#f2f0ea; */
+	background-color: #dad7cf;
+}
+
+canvas {
+	z-index: 0;
+}
+video {
+	max-width: none;
+}
+summary {
+	list-style: none;
+}
+
+/* Chrome、Safari */
+summary::-webkit-details-marker {
+	display: none;
+}
+
+
+.search_button_main {
+	background-color: aquamarine;
+	border-radius: 30%;
+	padding: 0.5%;
+}
+.camera_button_main {
+	background-color: aquamarine;
+	border-radius: 30%;
+	padding: 0.5%;
+}
+.debug_button {
+	position: fixed;
+	left: 40%;
+	/* bottom: 20%; */
+	top: 5%;
+	background-color: red;
+}
+.debug_button:hover {
+	background-color: blue;
+}
+.display_none {
+	display: none;
+}
+.display_default {
+	display: inline;
+}
+.backButton {
+	position: fixed;
+	position: fixed; 
+	bottom: 5%; 
+	z-index: 100; 
+	background-color: #5850eb;
+}

@@ -376,15 +376,6 @@ pub fn dijkstra(start: u16, goal: u16) -> Result<(Vec<u16>, usize), String> {
 		used[target] = true;
 	}
 
-	// let record = [];
-	// for(let i = 0;true;i++) {
-	// node = via[node];
-	// record.push(node);
-	// if(node === start) break;
-	// }
-	// record.reverse();
-	// record.push(goal);
-
 	let mut node: usize = target;
 	let mut record: Vec<u16> = Vec::new();
 	loop {

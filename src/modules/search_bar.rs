@@ -1,5 +1,3 @@
-use std::vec;
-
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 mod search;
@@ -50,30 +48,26 @@ impl Component for SearchBar {
 				true
 			}
 			Msg::BackPage => {
-				unsafe {
-					web_sys::console::log_1(&"BackPage".into());
-				}
+				log::info!("BackPage");
 				self.props.on_exit.emit(());
 				true
-			},
+			}
 			Msg::Submit => {
 				let start = match self.props.start {
 					Some(s) => s,
-					None => unsafe {
-						web_sys::console::log_1(&"self.props.start doesn't have a value. add popup for tell user moving to AR-Mode".into());
+					None => {
+						log::info!("self.props.start doesn't have a value. add popup for tell user moving to AR-Mode");
 						0
-					},
+					}
 				};
 
-				unsafe {
-					web_sys::console::log_1(&format!("start: {}", start).into());
-				}
+				log::info!("start: {}", start);
 
 				if let Some(goal) = search::search_destination(&self.text, start) {
 					self.props.on_enter.emit(goal);
 				}
 				true
-			},
+			}
 		}
 	}
 
@@ -125,47 +119,6 @@ impl Component for SearchBar {
 				</div>
 			</div>
 		}
-	}
-}
-
-struct Card {
-	bg_color: String,
-	color: String,
-	title: String,
-	attr: String,
-	distance: String,
-	time: String,
-}
-
-fn view_card(card: Card) -> Html {
-	html! {
-		<section class="w-1/3 rounded-xl text-center mt-10 mx-auto" style=format!("background-color : {}; color :{}", card.bg_color, card.color)>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="60px" height="60px" class="rounded-full bg-blue-700 -mt-7 ml-7 border-4">
-				<path d="M0 0h24v24H0V0z" fill="none"/>
-				<path d="M5.5 22v-7.5H4V9c0-1.1.9-2 2-2h3c1.1 0 2 .9 2 2v5.5H9.5V22h-4zM18 22v-6h3l-2.54-7.63C18.18 7.55 17.42 7 16.56 7h-.12c-.86 0-1.63.55-1.9 1.37L12 16h3v6h3zM7.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm9 0c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2z"/>
-			</svg>
-
-			<span class="text-3xl">
-				{
-					card.title
-				}
-			</span>
-			<h5>
-				{card.attr}
-			</h5>
-			<div class="flex flex-row">
-				<div class="bg-gray-300 w-1/6 m-5 rounded-lg">
-					{
-						card.distance
-					}
-				</div>
-				<div class="bg-gray-300 w-1/6 m-5 rounded-lg">
-					{
-						card.time
-					}
-				</div>
-			</div>
-		</section>
 	}
 }
 

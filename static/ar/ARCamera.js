@@ -3,15 +3,17 @@ AFRAME.registerComponent('markerhandler', {
 		init: function() {
 			this.el.sceneEl.addEventListener('markerFound', () => {
 				// get AR_code from HTML-data-property
-				let [L_pos,R_pos] = this.el.dataset['location'].split(',');
+				console.log("GET AR");
+				let [now_pos,R_pos] = this.el.dataset['location'].split(',');
+				localStorage.setItem("start",now_pos);
 
 				let ID = this.el.id;
 
 				let destination = Number(localStorage.getItem("goal"));
+				console.log("ID:",ID," X:",now_pos," Y:",R_pos," destination:",destination);
 
-				console.log("ID:",ID," X:",L_pos," Y:",R_pos," destination:",destination);
 				if(!isNaN(destination)) {
-					let Edge = (L_pos,R_pos);
+					let Edge = (now_pos,R_pos);
 					let cursor = Route_dir(Edge,destination);
 					
 					console.log("Route Direction",cursor);
@@ -71,4 +73,3 @@ function Route_dir(Edge,goal) {
 	}
 
 }
-

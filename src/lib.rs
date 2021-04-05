@@ -1,11 +1,21 @@
 #![recursion_limit = "1024"]
-#[warn(unused_imports)]
+#![allow(unused_imports)]
+
+mod components;
 mod modules;
 
+use std::u16;
 use wasm_bindgen::prelude::*;
 use yew::html;
-use yew::prelude::*;
+// use serde::{Deserialize, Serialize};
+use yew::services::fetch::{FetchService, FetchTask, Request, Response};
+use yew::{
+	format::{Json, Nothing},
+	prelude::*,
+	services::StorageService,
+};
 
+use components::dialog::Dialog;
 use modules::map::*;
 use modules::search_bar::SearchBar;
 use modules::side_bar::SideBar;
@@ -21,51 +31,93 @@ enum Msg {
 	DownFloor,
 	AddGoal(u16),
 	CanvasClick(i32, i32),
-	Test,
+	ChangeDialogVisibility,
 }
 struct Model {
 	link: ComponentLink<Self>,
 	page: Page,
 	map: Map,
+	dialog_visible: bool,
+	storage: StorageService,
 }
 impl Component for Model {
 	type Message = Msg;
 	type Properties = ();
 	fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-		let storage = web_sys::window().unwrap().local_storage().unwrap().unwrap();
+		let mut storage = yew::services::StorageService::new(yew::services::storage::Area::Local)
+			.expect("Can not start localStrage");
 
-		let (mut start, mut goal): (Option<u16>, Option<u16>) = (Some(1), Some(1));
+		let (mut start, mut goal): (Option<u16>, Option<u16>) = (None, None);
 		let (mut current_floor, mut display_floor): (u8, u8) = (1, 1);
 
-		match storage.get_item("first").unwrap() {
-			Some(a) => {
-				if let Some(floor) = storage.get_item("current_floor").unwrap() {
-					current_floor = floor.parse().unwrap();
+		// get current_floor from local storage
+		match storage.restore("current_floor") {
+			Ok(f) => {
+				log::info!("current_floor from local storage;{}", f);
+				match f.parse::<u8>() {
+					Ok(floor) => {
+						current_floor = floor;
+					}
+					Err(e) => {
+						log::error!("Can't parse current_floor; {:#?}", e);
+					}
 				}
-				if let Some(floor) = storage.get_item("display_floor").unwrap() {
-					display_floor = floor.parse().unwrap();
-				}
-
-				// if let Some(node) = storage.get_item("start").unwrap() {
-				// if let Ok(result) = node().parse() {
-				// start = result;
-				// }
-				//
-				// start = Some(node.parse().unwrap());
-				// }
-				//
-				// if let Some(node) = storage.get_item("goal").unwrap() {
-				// goal = node.parse().unwrap_or(None);
-				// }
 			}
-			None => {
-				storage.set_item("first", "Hi");
-				storage.set_item("current_floor", "1");
-				storage.set_item("display_floor", "1");
-				storage.set_item("start", "1");
-				storage.set_item("goal", "None");
+			Err(e) => {
+				log::error!("Can't get current_floor from LocalStorage error:{}", e);
+				storage.store("current_floor", yew::format::Json(&1));
 			}
 		}
+
+		// get display_floor from local storage
+		match storage.restore("display_floor") {
+			Ok(f) => {
+				log::info!("display_floor from local storage;{}", f);
+				match f.parse::<u8>() {
+					Ok(floor) => {
+						display_floor = floor;
+					}
+					Err(e) => {
+						log::error!("Can't parse display; {:#?}", e);
+					}
+				}
+			}
+			Err(e) => {
+				log::error!("Can't get display from LocalStorage error:{}", e);
+				storage.store("display_floor", yew::format::Json(&1));
+			}
+		}
+
+		// get start(node) from local storage
+		match storage.restore("start") {
+			Ok(s_node) => match s_node.parse::<u16>() {
+				Ok(node) => {
+					start = Some(node);
+				}
+				Err(e) => {
+					log::error!("Can't parse start(node); {}", e);
+				}
+			},
+			Err(e) => {
+				log::error!("Can't get node from LocalStorage error:{}", e);
+			}
+		}
+
+		// get goal from local storage
+		match storage.restore("goal") {
+			Ok(g_node) => match g_node.parse::<u16>() {
+				Ok(node) => {
+					goal = Some(node);
+				}
+				Err(e) => {
+					log::error!("Can't parse goal(node); {}", e);
+				}
+			},
+			Err(e) => {
+				log::error!("Can't get node from LocalStorage error:{}", e);
+			}
+		}
+
 
 		Self {
 			link,
@@ -73,26 +125,11 @@ impl Component for Model {
 			map: Map {
 				current_floor,
 				display_floor,
-				start: Some(1),
-				goal: None,
+				start,
+				goal,
 			},
-		}
-	}
-
-	fn rendered(&mut self, first_render: bool) {
-		if first_render {
-			self.map.init();
-			self.map.draw_route();
-			self.map.draw_map();
-		}
-		unsafe {
-			web_sys::console::log_1(
-				&format!(
-					"current: {} display: {} start: {:?} goal: {:?}",
-					self.map.current_floor, self.map.display_floor, self.map.start, self.map.goal
-				)
-				.into(),
-			);
+			dialog_visible: false,
+			storage,
 		}
 	}
 
@@ -104,41 +141,50 @@ impl Component for Model {
 				match self.map.move_floor(self.map.display_floor + 1) {
 					Some(floor) => {
 						msg = floor.to_string();
-						let storage = web_sys::window().unwrap().local_storage().unwrap().unwrap();
-						storage.set_item("display_floor", &floor.to_string());
+						self.storage
+							.store("display_floor", yew::format::Json(&floor))
 					}
 					None => msg = "failed to Up".into(),
 				}
-				unsafe { web_sys::console::log_1(&msg.into()) }
+				log::info!("{}", msg);
 			}
 			Msg::DownFloor => {
 				let msg: String;
 				match self.map.move_floor(self.map.display_floor - 1) {
 					Some(floor) => {
 						msg = floor.to_string();
-						let storage = web_sys::window().unwrap().local_storage().unwrap().unwrap();
-						storage.set_item("display_floor", &floor.to_string());
+						self.storage
+							.store("display_floor", yew::format::Json(&floor));
 					}
 					None => msg = "failed to Up".into(),
 				}
-				unsafe { web_sys::console::log_1(&msg.into()) }
+				log::info!("{}", msg);
 			}
 			Msg::AddGoal(goal) => {
 				self.map.goal = Some(goal);
-				unsafe {
-					web_sys::console::log_1(&format!("goal: {}", &self.map.goal.unwrap()).into());
-				}
-				let storage = web_sys::window().unwrap().local_storage().unwrap().unwrap();
-				storage.set_item("goal", &goal.to_string());
+				log::info!("goal: {}", &self.map.goal.unwrap());
+				self.storage.store("goal", yew::format::Json(&goal));
 				self.page = Page::Main;
 				self.map.draw_map();
+				self.dialog_visible = false;
 			}
-			Msg::Test => unsafe {
-				web_sys::console::log_1(&"callBacked".into());
-			},
-			Msg::CanvasClick(x, y) => unsafe {
-				web_sys::console::log_1(&format!("x:{}, y:{}", x, y).into());
-			},
+			Msg::CanvasClick(x, y) => {
+				log::info!("x: {}, y:{}", x, y);
+				log::info!("{:#?}", 
+					modules::map::Map::color(x,y)
+				);
+				log::info!(
+					"start: {:#?}, goal: {:#?}, current_floor: {}, display_floor: {}",
+					self.map.start,
+					self.map.goal,
+					self.map.current_floor,
+					self.map.display_floor
+				);
+				self.dialog_visible = true;
+			}
+			Msg::ChangeDialogVisibility => {
+				self.dialog_visible = !self.dialog_visible;
+			}
 		}
 		true
 	}
@@ -154,23 +200,37 @@ impl Component for Model {
 				match self.page {
 					Page::Main => html!{},
 					Page::Search => {
-					 html! {
-						 <SearchBar
+					html! {
+						<SearchBar
 							value=""
 							start=self.map.start
 							on_exit=self.link.callback(|_| Msg::ChangePage(Page::Main))
 							on_enter=self.link.callback(Msg::AddGoal)
-						 ></SearchBar>
-					 }
+						></SearchBar>
+					}
 					},
 					Page::SideBar => {
-					 html!{
-						 <SideBar on_exit=self.link.callback(|_| Msg::ChangePage(Page::Main))></SideBar>
-					 }
+					html!{
+						<SideBar on_exit=self.link.callback(|_| Msg::ChangePage(Page::Main))/>
+					}
 					},
-					_ => html!{},
 				}
-
+			}
+			{
+				match self.dialog_visible {
+					true => html! {
+						<Dialog
+							on_close=self.link.callback(|_| Msg::ChangeDialogVisibility)
+							on_add_goal=self.link.callback(|goal| {
+								Msg::AddGoal(goal)
+							}
+							)
+							goal=self.map.goal
+							start=self.map.start
+						/>
+					},
+					_ => html!{}
+				}
 			}
 
 				<button style="position: fixed; z-index : 10;" onclick=self.link.callback(|_| Msg::ChangePage(Page::SideBar))>
@@ -216,9 +276,7 @@ impl Component for Model {
 						</svg>
 					</button>
 
-					<a class="camera_button_main" onclick=self.link.callback(|_| Msg::Test)
-						href="https://map.oberk.dev/ar"
-					>
+					<a class="camera_button_main" href="https://map.oberk.dev/ar">
 
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 md:w-32 md:h-32" viewBox="0 0 24 24"
 						fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -232,9 +290,20 @@ impl Component for Model {
 			</div>
 		}
 	}
+
+	fn rendered(&mut self, first_render: bool) {
+		if first_render {
+			self.map.init();
+			self.map.draw_route();
+			self.map.draw_map();
+		}
+	}
+
+	fn destroy(&mut self) {}
 }
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-	App::<Model>::new().mount_to_body();
+	wasm_logger::init(wasm_logger::Config::default());
+	yew::start_app::<Model>();
 }

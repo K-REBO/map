@@ -1,3 +1,5 @@
+use std::{iter::StepBy, u16};
+
 use wasm_bindgen::prelude::*;
 
 use super::route;
@@ -29,10 +31,8 @@ impl Map {
 			}
 			_ => {
 				let msg = "Err::start node or goal node is set".to_string();
-				unsafe {
-					use web_sys::console;
-					console::log_1(&msg.clone().into());
-				}
+
+				log::info!("{}", msg);
 				return None;
 			}
 		}
@@ -40,17 +40,16 @@ impl Map {
 		let (route, cost) = match route::dijkstra(start, goal) {
 			Ok(i) => i,
 			Err(text) => {
-				unsafe {
-					use web_sys::console;
-					console::log_1(&format!("Err in function draw_map in impl Map{}", text).into());
-				}
+				log::info!("Err in function draw_map in impl Map{}", text);
 				return None;
 			}
 		};
+		log::info!("Dijkstra Result: COST: {}", cost);
 
 		unsafe {
 			drawRoute(route, self.display_floor);
 		}
+
 		Some("".into())
 	}
 
@@ -85,6 +84,13 @@ impl Map {
 			}
 		}
 	}
+
+	pub fn color(x: i32, y: i32) -> Vec<u16> {
+		unsafe {
+			return get_node(x, y);
+		}
+	}
+
 }
 
 #[wasm_bindgen(module = "/src/js/canvas.js")]
@@ -95,4 +101,8 @@ extern "C" {
 	fn drawRoute(route: Vec<u16>, floor: u8);
 	fn drawConnectNode(node1: u16, node2: u16);
 	fn drawPlaceByNode(node: u16, is_goal: bool);
+}
+#[wasm_bindgen(module = "/src/js/utils.js")]
+extern "C" {
+	fn get_node(x:i32, y:i32) -> Vec<u16>;
 }

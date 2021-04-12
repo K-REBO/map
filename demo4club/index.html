@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+	<!-- <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script> -->
+	<!-- <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script> -->
+	<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+	<title>Demo</title>
+</head>
+<body style="margin: 0px; overflow: hidden;">
+	<a-scene embedded arjs="debugUIEnabled:false;" vr-mode-ui="enabled: false;">
+
+		<a-assets>
+			<img id="pixels" src="images/pixels.png" />
+			<a-asset-items id="balloon" src="model.gltf" ></a-asset-items>
+		</a-assets>
+
+		<a-marker type="pattern" url="pattern-qr.patt">
+			<a-text value="ようこそ"
+		        font="fonts/custom-msdf.json"
+		        color="#209cee"
+				rotation="-90 0 0"
+				scale="3 3 3"
+				position="-0.5 -1 -1"
+    		    negate="false">
+			</a-text>
+			<a-text value="プログラミング同好会"
+				font="fonts/custom-msdf.json"
+				color="#209cee"
+				rotation="-90 0 0"
+				scale="3 3 3"
+				position="-1.7 -1 -0.5"
+				negate="false">
+			</a-text>
+			<a-text value="兼部可能"
+				font="fonts/custom-msdf.json"
+				color="#209cee"
+				rotation="-90 0 0"
+				scale="3 3 3"
+				position="-0.5 -1 0"
+				negate="false">
+			</a-text>
+			<a-text value="とりあえず見るだけでもいいので"
+				font="fonts/custom-msdf.json"
+				color="#209cee"
+				rotation="-90 0 0"
+				scale="3 3 3"
+				position="-2.3 -1 +0.5"
+				negate="false">
+			</a-text>
+			<a-text value="物理教室へ"
+				font="fonts/custom-msdf.json"
+				color="#ff3860"
+				rotation="-90 0 0"
+				scale="3 3 3"
+				position="-0.5 -1 +1"
+			negate="false">
+			</a-text>
+			<a-entity gltf-model="#balloon"
+				scale="1 1 1"
+				position="-0.2 0.2 -0.4"
+				rotation="90 180 0"
+			></a-entity>
+			<a-entity gltf-model="#balloon"
+				scale="1 1 1"
+				position="2 -2.5 +1"
+				rotation="90 180 0"
+			></a-entity>
+		</a-marker>
+		<a-entity camera></a-entity>
+	</a-scene>
+</body>
+</html>

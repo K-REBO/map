@@ -1,0 +1,433 @@
+{
+   "accessors" : [
+      {
+         "bufferView" : 2,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 9780,
+         "max" : [ 1, 1, 1, 1 ],
+         "min" : [ 0.2195197343826294, 0.5542271137237549, 0.06575388461351395, 1 ],
+         "name" : "accessor_color_m0-PolyPaper21_-23714",
+         "type" : "VEC4"
+      },
+      {
+         "bufferView" : 2,
+         "byteOffset" : 156480,
+         "componentType" : 5126,
+         "count" : 9474,
+         "max" : [ 1, 1, 1, 1 ],
+         "min" : [ 0.2195197343826294, 0.1219857111573219, 0.03994716703891754, 1 ],
+         "name" : "accessor_color_m1-PolyPaper21_-23716",
+         "type" : "VEC4"
+      },
+      {
+         "bufferView" : 2,
+         "byteOffset" : 308064,
+         "componentType" : 5126,
+         "count" : 9426,
+         "max" : [ 1, 1, 1, 1 ],
+         "min" : [ 0.9075471758842468, 0.05284162983298302, 0.0328759141266346, 1 ],
+         "name" : "accessor_color_m2-PolyPaper21_-23718",
+         "type" : "VEC4"
+      },
+      {
+         "bufferView" : 2,
+         "byteOffset" : 458880,
+         "componentType" : 5126,
+         "count" : 4788,
+         "max" : [ 1, 1, 1, 1 ],
+         "min" : [ 1, 1, 1, 1 ],
+         "name" : "accessor_color_m3-PolyPaper21_-24700",
+         "type" : "VEC4"
+      },
+      {
+         "bufferView" : 0,
+         "byteOffset" : 0,
+         "componentType" : 5123,
+         "count" : 14844,
+         "max" : [ 9779 ],
+         "min" : [ 0 ],
+         "name" : "accessor_indices_0_m0-PolyPaper21_-23714",
+         "type" : "SCALAR"
+      },
+      {
+         "bufferView" : 0,
+         "byteOffset" : 29688,
+         "componentType" : 5123,
+         "count" : 14376,
+         "max" : [ 9473 ],
+         "min" : [ 0 ],
+         "name" : "accessor_indices_0_m1-PolyPaper21_-23716",
+         "type" : "SCALAR"
+      },
+      {
+         "bufferView" : 0,
+         "byteOffset" : 58440,
+         "componentType" : 5123,
+         "count" : 14340,
+         "max" : [ 9425 ],
+         "min" : [ 0 ],
+         "name" : "accessor_indices_0_m2-PolyPaper21_-23718",
+         "type" : "SCALAR"
+      },
+      {
+         "bufferView" : 0,
+         "byteOffset" : 87120,
+         "componentType" : 5123,
+         "count" : 7332,
+         "max" : [ 4787 ],
+         "min" : [ 0 ],
+         "name" : "accessor_indices_0_m3-PolyPaper21_-24700",
+         "type" : "SCALAR"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 117360,
+         "componentType" : 5126,
+         "count" : 9780,
+         "max" : [ 0.9996524, 0.9999582, 0.9980017 ],
+         "min" : [ -0.9997244, -0.999787, -0.9959945 ],
+         "name" : "accessor_normal_m0-PolyPaper21_-23714",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 348408,
+         "componentType" : 5126,
+         "count" : 9474,
+         "max" : [ 0.9998952, 0.9999861, 0.9976383 ],
+         "min" : [ -0.9961068, -0.998872, -0.9985182 ],
+         "name" : "accessor_normal_m1-PolyPaper21_-23716",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 575208,
+         "componentType" : 5126,
+         "count" : 9426,
+         "max" : [ 0.9997844, 0.9997490999999999, 0.9979168 ],
+         "min" : [ -0.999599, -0.9996312000000001, -0.9999207 ],
+         "name" : "accessor_normal_m2-PolyPaper21_-23718",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 745776,
+         "componentType" : 5126,
+         "count" : 4788,
+         "max" : [ 0.9951643, 0.998735, 0.9996786 ],
+         "min" : [ -0.9786838, -0.9953752, -0.9671239 ],
+         "name" : "accessor_normal_m3-PolyPaper21_-24700",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 0,
+         "componentType" : 5126,
+         "count" : 9780,
+         "max" : [ 0.9166994000000001, 1.127631, 0.2720354 ],
+         "min" : [ 0.2998842, -0.4056736, -0.9714459 ],
+         "name" : "accessor_position_m0-PolyPaper21_-23714",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 234720,
+         "componentType" : 5126,
+         "count" : 9474,
+         "max" : [ 1.172609, 1.343866, 0.01619548 ],
+         "min" : [ -0.01492252, -0.5455182, -1.061796 ],
+         "name" : "accessor_position_m1-PolyPaper21_-23716",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 462096,
+         "componentType" : 5126,
+         "count" : 9426,
+         "max" : [ 1.200701, 1.265041, -0.04031961 ],
+         "min" : [ 0.4647454, -0.5154878000000001, -0.8141308 ],
+         "name" : "accessor_position_m2-PolyPaper21_-23718",
+         "type" : "VEC3"
+      },
+      {
+         "bufferView" : 1,
+         "byteOffset" : 688320,
+         "componentType" : 5126,
+         "count" : 4788,
+         "max" : [ 0.6845534, -0.05380076, -0.2219552 ],
+         "min" : [ 0.5865152, -0.5659615, -0.2916057 ],
+         "name" : "accessor_position_m3-PolyPaper21_-24700",
+         "type" : "VEC3"
+      }
+   ],
+   "asset" : {
+      "copyright" : "Unknown",
+      "extras" : {
+         "GOOGLE_processor_version" : 294144208
+      },
+      "generator" : "glTF 1-to-2 Upgrader for Google Blocks",
+      "version" : "2.0"
+   },
+   "bufferViews" : [
+      {
+         "buffer" : 0,
+         "byteLength" : 101784,
+         "byteOffset" : 0,
+         "name" : "ushortBufferView",
+         "target" : 34963
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 803232,
+         "byteOffset" : 101784,
+         "byteStride" : 12,
+         "name" : "vec3BufferView",
+         "target" : 34962
+      },
+      {
+         "buffer" : 0,
+         "byteLength" : 535488,
+         "byteOffset" : 905016,
+         "byteStride" : 16,
+         "name" : "vec4BufferView",
+         "target" : 34962
+      }
+   ],
+   "buffers" : [
+      {
+         "byteLength" : 1440504,
+         "name" : "model",
+         "uri" : "model.bin"
+      }
+   ],
+   "cameras" : [
+      {
+         "perspective" : {
+            "yfov" : 0.7853981633974483,
+            "znear" : 0.1000000014901161
+         },
+         "type" : "perspective"
+      }
+   ],
+   "extensions" : {
+      "KHR_lights_punctual" : {
+         "lights" : [
+            {
+               "color" : [ 1, 0.9333333333333333, 0.8666666666666667 ],
+               "intensity" : 0.25,
+               "name" : "headLight",
+               "type" : "directional"
+            },
+            {
+               "color" : [ 1, 0.9333333333333333, 0.8666666666666667 ],
+               "intensity" : 0.324999988079071,
+               "name" : "keyLight",
+               "type" : "directional"
+            }
+         ]
+      }
+   },
+   "extensionsUsed" : [ "GOOGLE_backgrounds", "GOOGLE_camera_settings", "KHR_lights_punctual" ],
+   "extras" : {
+      "GOOGLE_initial_camera_motion" : {
+         "motionPath" : "FULL_ROTATION"
+      },
+      "GOOGLE_lighting_rig" : {
+         "disableShadows" : false
+      }
+   },
+   "materials" : [
+      {
+         "alphaMode" : "OPAQUE",
+         "doubleSided" : false,
+         "name" : "BlocksPaper",
+         "pbrMetallicRoughness" : {
+            "baseColorFactor" : [ 1, 1, 1, 1 ],
+            "metallicFactor" : 0,
+            "roughnessFactor" : 0.6
+         }
+      },
+      {
+         "alphaMode" : "BLEND",
+         "doubleSided" : false,
+         "name" : "BlocksGlass",
+         "pbrMetallicRoughness" : {
+            "baseColorFactor" : [ 0.2, 0.2, 1, 0.3 ],
+            "metallicFactor" : 1,
+            "roughnessFactor" : 0.4
+         }
+      },
+      {
+         "alphaMode" : "OPAQUE",
+         "doubleSided" : true,
+         "name" : "BlocksGem",
+         "pbrMetallicRoughness" : {
+            "baseColorFactor" : [ 1, 0.4, 1, 1 ],
+            "metallicFactor" : 0,
+            "roughnessFactor" : 0.1
+         }
+      }
+   ],
+   "meshes" : [
+      {
+         "name" : "mesh_m0-PolyPaper21_-23714",
+         "primitives" : [
+            {
+               "attributes" : {
+                  "COLOR_0" : 0,
+                  "NORMAL" : 8,
+                  "POSITION" : 12
+               },
+               "indices" : 4,
+               "material" : 0,
+               "mode" : 4
+            }
+         ]
+      },
+      {
+         "name" : "mesh_m1-PolyPaper21_-23716",
+         "primitives" : [
+            {
+               "attributes" : {
+                  "COLOR_0" : 1,
+                  "NORMAL" : 9,
+                  "POSITION" : 13
+               },
+               "indices" : 5,
+               "material" : 0,
+               "mode" : 4
+            }
+         ]
+      },
+      {
+         "name" : "mesh_m2-PolyPaper21_-23718",
+         "primitives" : [
+            {
+               "attributes" : {
+                  "COLOR_0" : 2,
+                  "NORMAL" : 10,
+                  "POSITION" : 14
+               },
+               "indices" : 6,
+               "material" : 0,
+               "mode" : 4
+            }
+         ]
+      },
+      {
+         "name" : "mesh_m3-PolyPaper21_-24700",
+         "primitives" : [
+            {
+               "attributes" : {
+                  "COLOR_0" : 3,
+                  "NORMAL" : 11,
+                  "POSITION" : 15
+               },
+               "indices" : 7,
+               "material" : 0,
+               "mode" : 4
+            }
+         ]
+      }
+   ],
+   "nodes" : [
+      {
+         "mesh" : 2,
+         "name" : "node_MeshObject1170381056-PolyPaper21"
+      },
+      {
+         "mesh" : 3,
+         "name" : "node_MeshObject505688832-PolyPaper21"
+      },
+      {
+         "mesh" : 1,
+         "name" : "node_MeshObject651660992-PolyPaper21"
+      },
+      {
+         "mesh" : 0,
+         "name" : "node_MeshObject796867776-PolyPaper21"
+      },
+      {
+         "children" : [ 5 ]
+      },
+      {
+         "children" : [ 6 ],
+         "extras" : {
+            "isTransformNode" : 1
+         },
+         "translation" : [ 0.5990179987714663, 0.8450732350110832, -0.4213612800696122 ]
+      },
+      {
+         "children" : [ 3, 2, 0, 1 ],
+         "translation" : [ -0.5990179987714663, -0.8450732350110832, 0.4213612800696122 ]
+      },
+      {
+         "camera" : 0,
+         "children" : [ 8 ],
+         "rotation" : [
+            0.04457483274090548,
+            -0.6275138852164829,
+            0.03602262804087968,
+            0.7764932571604621
+         ],
+         "translation" : [ -3.013209342956543, -0.01547001674771309, 0.353154718875885 ]
+      },
+      {
+         "extensions" : {
+            "KHR_lights_punctual" : {
+               "light" : 0
+            }
+         },
+         "extras" : {
+            "isHeadLight" : 1
+         },
+         "name" : "headLightNode",
+         "translation" : [ -1.460484974256528, 0.7302424871282638, 0.7302424871282638 ]
+      },
+      {
+         "extensions" : {
+            "KHR_lights_punctual" : {
+               "light" : 1
+            }
+         },
+         "extras" : {
+            "isKeyLight" : 1
+         },
+         "name" : "keyLightNode",
+         "rotation" : [ -0.7505326882858236, -0.3752663441429118, 0, 0.5439447166468927 ],
+         "scale" : [ 0, 0, 1.475089823999093 ],
+         "translation" : [ -0.8285923481513324, 3.13537253354968, -1.79397774880434 ]
+      }
+   ],
+   "scene" : 0,
+   "scenes" : [
+      {
+         "extensions" : {
+            "GOOGLE_backgrounds" : {
+               "color" : [ 0.7725490196078432, 0.792156862745098, 0.9137254901960784 ]
+            },
+            "GOOGLE_camera_settings" : {}
+         },
+         "extras" : {
+            "GOOGLE_camera_index" : {
+               "cameraIndex" : 0,
+               "nodeIndex" : 7
+            },
+            "GOOGLE_geometry_data" : {
+               "stats" : {
+                  "centroid" : [ 0.6464974758477604, 0.1851928855514942, -0.3188879248052477 ],
+                  "radius" : 1.460484974256528,
+                  "stdev" : 0.4736945481169438
+               },
+               "visualCenterPoint" : [ 0.5990179987714663, 0.8450732350110832, -0.4213612800696122 ]
+            },
+            "GOOGLE_hemi_light" : {
+               "groundColor" : [ 0.7725490196078432, 0.792156862745098, 0.9137254901960784 ]
+            }
+         },
+         "name" : "defaultScene",
+         "nodes" : [ 4, 7, 9 ]
+      }
+   ]
+}

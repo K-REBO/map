@@ -41,9 +41,9 @@ impl Component for SideBar {
 
 	fn view(&self) -> Html {
 		html! {
-			<div class="h-screen fixed" style="z-index:1000; background-color : #dfdfdf; width: 20rem;">
+			<div class="h-screen fixed" style="z-index:1000; background-color : #dfdfdf; width: 40%;">
 				<button onclick=self.link.callback(|_| Msg::Exit)>
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 md:w-32 md:h-32" viewBox="0 0 24 24"
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-14" viewBox="0 0 24 24"
 					fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<line x1="3" y1="12" x2="21" y2="12"/>
 						<line x1="3" y1="6" x2="21" y2="6"/>

@@ -7,7 +7,6 @@ mod modules;
 use std::u16;
 use wasm_bindgen::prelude::*;
 use yew::html;
-// use serde::{Deserialize, Serialize};
 use yew::services::fetch::{FetchService, FetchTask, Request, Response};
 use yew::{
 	format::{Json, Nothing},
@@ -25,6 +24,7 @@ enum Page {
 	Main,
 	SideBar,
 }
+
 enum Msg {
 	ChangePage(Page),
 	UpFloor,
@@ -33,13 +33,16 @@ enum Msg {
 	CanvasClick(i32, i32),
 	ChangeDialogVisibility,
 }
+
 struct Model {
 	link: ComponentLink<Self>,
 	page: Page,
 	map: Map,
 	dialog_visible: bool,
 	storage: StorageService,
+	fetch_task: Option<FetchTask>,
 }
+
 impl Component for Model {
 	type Message = Msg;
 	type Properties = ();
@@ -48,7 +51,7 @@ impl Component for Model {
 			.expect("Can not start localStrage");
 
 		let (mut start, mut goal): (Option<u16>, Option<u16>) = (None, None);
-		let (mut current_floor, mut display_floor): (u8, u8) = (1, 1);
+		let (mut current_floor, mut display_floor): (u8, u8) = (3, 3);
 
 		// get current_floor from local storage
 		match storage.restore("current_floor") {
@@ -65,7 +68,7 @@ impl Component for Model {
 			}
 			Err(e) => {
 				log::error!("Can't get current_floor from LocalStorage error:{}", e);
-				storage.store("current_floor", yew::format::Json(&1));
+				storage.store("current_floor", yew::format::Json(&3));
 			}
 		}
 
@@ -84,7 +87,7 @@ impl Component for Model {
 			}
 			Err(e) => {
 				log::error!("Can't get display from LocalStorage error:{}", e);
-				storage.store("display_floor", yew::format::Json(&1));
+				storage.store("display_floor", yew::format::Json(&3));
 			}
 		}
 
@@ -118,7 +121,6 @@ impl Component for Model {
 			}
 		}
 
-
 		Self {
 			link,
 			page: Page::Main,
@@ -130,8 +132,18 @@ impl Component for Model {
 			},
 			dialog_visible: false,
 			storage,
+			fetch_task: None,
 		}
 	}
+
+	fn rendered(&mut self, first_render: bool) {
+		if first_render {
+			self.map.init();
+			self.map.draw_route();
+			self.map.draw_map();
+		}
+	}
+
 
 	fn update(&mut self, msg: Self::Message) -> ShouldRender {
 		match msg {
@@ -170,9 +182,7 @@ impl Component for Model {
 			}
 			Msg::CanvasClick(x, y) => {
 				log::info!("x: {}, y:{}", x, y);
-				log::info!("{:#?}", 
-					modules::map::Map::color(x,y)
-				);
+				log::info!("{:#?}", modules::map::Map::color(x, y));
 				log::info!(
 					"start: {:#?}, goal: {:#?}, current_floor: {}, display_floor: {}",
 					self.map.start,
@@ -180,6 +190,9 @@ impl Component for Model {
 					self.map.current_floor,
 					self.map.display_floor
 				);
+
+
+
 				self.dialog_visible = true;
 			}
 			Msg::ChangeDialogVisibility => {
@@ -234,11 +247,11 @@ impl Component for Model {
 			}
 
 				<button style="position: fixed; z-index : 10;" onclick=self.link.callback(|_| Msg::ChangePage(Page::SideBar))>
-					<svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 md:w-32 md:h-32" viewBox="0 0 24 24"
-					fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<line x1="3" y1="12" x2="21" y2="12"/>
-						<line x1="3" y1="6" x2="21" y2="6"/>
-						<line x1="3" y1="18" x2="21" y2="18"/>
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-14" viewBox="0 0 24 24"
+						fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<line x1="3" y1="12" x2="21" y2="12"/>
+							<line x1="3" y1="6" x2="21" y2="6"/>
+							<line x1="3" y1="18" x2="21" y2="18"/>
 					</svg>
 				</button>
 
@@ -290,15 +303,6 @@ impl Component for Model {
 			</div>
 		}
 	}
-
-	fn rendered(&mut self, first_render: bool) {
-		if first_render {
-			self.map.init();
-			self.map.draw_route();
-			self.map.draw_map();
-		}
-	}
-
 	fn destroy(&mut self) {}
 }
 

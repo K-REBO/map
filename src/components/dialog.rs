@@ -1,14 +1,12 @@
 use crate::modules::route::dijkstra;
+use serde::{Deserialize, Serialize};
 use std::u16;
 use yew::services::fetch::{FetchService, FetchTask, Request, Response};
 use yew::{
-    format::{Json, Nothing},
-    prelude::*,
-    services::StorageService,
+	format::{Json, Nothing},
+	prelude::*,
+	services::StorageService,
 };
-use serde::{Deserialize, Serialize};
-
-
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
@@ -30,49 +28,42 @@ pub struct Dialog {
 	props: Props,
 	place_info: PlaceInfo,
 	fetch_task: Option<FetchTask>,
-	cost: Option<usize>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct PlaceInfo {
 	title: String,
-	place_name: String,
+	title_ruby: String,
+	classroom: String,
+	place_node: Option<u32>,
+	floor: Option<u8>,
 	description: String,
-	waitting_time_minute: u16,// use chrono or something to use time type? so sleepy
+	social_url: Option<String>
 }
 
 pub enum Msg {
 	MovePage(Page),
 	CloseSummary,
 	AddGoal,
-    ReceiveResponse(Result<PlaceInfo, anyhow::Error>),
+	ReceiveResponse(Result<PlaceInfo, anyhow::Error>),
 }
 
 impl Component for Dialog {
 	type Message = Msg;
 	type Properties = Props;
 	fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-		let mut cost: Option<usize> = None;
-		if props.start.is_some() && props.goal.is_some() {
-			match dijkstra(props.start.unwrap(), props.goal.unwrap()) {
-				Ok((_, c)) => {
-					cost = Some(c);
-				}
-				Err(e) => {
-					log::error!("Can't find in Dijkstra: {:#?}", e);
-				}
-			};
-		};
 		Self {
 			link,
-			page: Page::Summary,
+			page: Page::Detail,
 			props,
-			cost,
 			place_info: PlaceInfo {
 				title: "Title".to_string(),
-				place_name: "11HR".to_string(),
+				title_ruby: "Ruby".to_string(),
+				classroom: "Network Error Occured".to_string(),
+				floor: None,
+				place_node:None,
 				description: "Example: put here some description;".to_string(),
-				waitting_time_minute: 10,
+				social_url:None,
 			},
 			fetch_task: None,
 		}
@@ -80,17 +71,19 @@ impl Component for Dialog {
 
 	fn rendered(&mut self, first_render: bool) {
 		if first_render {
-			let request = Request::get("http://localhost:18080")
-			.body(Nothing)
-			.expect("Could not build that request");
-			let callback =
-				self.link
-					.callback(|response: Response<Json<Result<PlaceInfo, anyhow::Error>>>| {
-						let Json(data) = response.into_body();
-						Msg::ReceiveResponse(data)
-					});
+			let request = Request::get("http://0.0.0.0:8080/test")
+				.body(Nothing)
+				.expect("Could not build that request");
+			let callback = self.link.callback(
+				|response: Response<Json<Result<PlaceInfo, anyhow::Error>>>| {
+					let Json(data) = response.into_body();
+					Msg::ReceiveResponse(data)
+				},
+			);
 			let task = FetchService::fetch(request, callback).expect("fail");
 			self.fetch_task = Some(task);
+
+
 		}
 	}
 
@@ -110,16 +103,15 @@ impl Component for Dialog {
 				} else {
 					log::error!("Wow, Goal is not set");
 				}
-			},
-			Msg::ReceiveResponse(response) =>  match response {
+			}
+			Msg::ReceiveResponse(response) => match response {
 				Ok(result) => {
-					log::info!("{:#?}",result);
-				},
+					self.place_info = result;
+				}
 				Err(error) => {
 					log::error!("{}", &error);
 				}
-
-			}
+			},
 		}
 		true
 	}
@@ -139,137 +131,108 @@ impl Component for Dialog {
 			{
 				match self.page {
 					Page::Summary => html! {
-						<div class="flex fixed justify-self-center" style="bottom: 23%; left: calc(50% - 95ex/2); z-index: 100;">
-							<section class="fixed bg-black text-white rounded-xl" style="width:95ex; height:17ex;">
+					},
+					Page::Detail => html! {
+						<div class="flex justify-center" style="z-index:100;">
+							<div style="width:90%;background-color: black; color:white; bottom: 0px;" class="rounded-2xl fixed text-center">
+								<div class="text-2xl">
+									<ruby style="color:hsl(141, 53%, 53%);">
+										{self.place_info.title.clone()}
+										<rt>{self.place_info.title_ruby.clone()}</rt>
+									</ruby>
+								</div>
+								<div class="">{self.place_info.classroom.clone()}</div>
+								<div>{self.place_info.description.clone()}</div>
+								{
+									match &self.place_info.social_url {
+										Some(url) => html! {
+											<div class="w-8 mx-auto bg-white rounded-2xl">
+												<a href={format!("\"{}\"", url)}>
+													<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" ml-update="aware">
+														<script xmlns=""/>
+														<path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+													</svg>
+												</a>
+											</div>			
+										},
+										None => html!{}
+									}
+								}
+								<div class="text-left">
+									<span>{"評価とレビュー"}</span>
+								//	<div>
+								//		<span>{"総合"}</span>
+								//		<div class="flex">
+								//			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+								//				<path fill="none" d="M0 0h24v24H0z"/>
+								//				<path d="M12 18.26l-7.053 3.948 1.575-7.928L.587
+								//				8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935
+								//				5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773
+								//				3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.572
+								//				3.573 3.305-.949 4.773L12 15.968z"/>
+								//			</svg>
+								//			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+								//				<path fill="none" d="M0 0h24v24H0z"/>
+								//				<path d="M12 15.968l4.247 2.377-.949-4.773 3.573-3.305-4.833-.573L12
+								//				5.275v10.693zm0 2.292l-7.053 3.948 1.575-7.928L.587
+								//				8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935 5.488 1.575
+								//				7.928L12 18.26z" fill="rgba(0,0,0,1)"/>
+								//			</svg>
+								//		</div>
+								//	</div>
+								//	<div>
+								//		<span>{"ストーリー"}</span>
+								//		<div class="flex">
+								//			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+								//				<path fill="none" d="M0 0h24v24H0z"/>
+								//				<path d="M12 18.26l-7.053 3.948 1.575-7.928L.587
+								//				8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935
+								//				5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773
+								//				3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.572
+								//				3.573 3.305-.949 4.773L12 15.968z"/>
+								//			</svg>
+								//		</div>
+								//	</div>
+								//	<div>
+								//		<span>{"装飾"}</span>
+								//		<div class="flex">
+								//			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+								//				<path fill="none" d="M0 0h24v24H0z"/>
+								//				<path d="M12 18.26l-7.053 3.948 1.575-7.928L.587
+								//				8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935
+								//				5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773
+								//				3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.572
+								//				3.573 3.305-.949 4.773L12 15.968z"/>
+								//			</svg>
+								//		</div>
+								//	</div>
+								//	<div>
+								//		<span>{"待ち時間"}</span>
+								//		<div class="flex">
+								//			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6">
+								//				<path fill="none" d="M0 0h24v24H0z"/>
+								//				<path d="M12 18.26l-7.053 3.948 1.575-7.928L.587
+								//				8.792l8.027-.952L12 .5l3.386 7.34 8.027.952-5.935
+								//				5.488 1.575 7.928L12 18.26zm0-2.292l4.247 2.377-.949-4.773
+								//				3.573-3.305-4.833-.573L12 5.275l-2.038 4.42-4.833.572
+								//				3.573 3.305-.949 4.773L12 15.968z"/>
+								//			</svg>
+								//		</div>
+								//	</div>
+								//</div>
+								//<div class="rounded text-center bg-gray-500" style="width: 80%; height: 10ex;">
+									<div>{"今夜作ります"}</div>
+								</div>
 								<button
-									style="float: right;"
-									onclick=self.link.callback(|_| Msg::CloseSummary)
-								>
-									<svg xmlns="http://www.w3.org/2000/svg" style="width: 7ex; height: 7ex;" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+								// style="float: right;"
+								onclick=self.link.callback(|_| Msg::CloseSummary)>
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
 										<line x1="18" y1="6" x2="6" y2="18"/>
 										<line x1="6" y1="6" x2="18" y2="18"/>
 									</svg>
 								</button>
-								<button
-									onclick=self.link.callback(|_| Msg::MovePage(Page::Detail))
-									class="absolute"
-									style="padding-top: 1ex; width: 92%; height: 100%;"
-								>
-									<h1 class="text-6xl">
-										{self.place_info.place_name.clone()}
-									</h1>
-									<h2 class="float-right">
-										<span class="text-3xl" style="color: hsl(141, 53%, 53%);">
-											{
-												match self.cost {
-													Some(c) =>html!{
-														<>
-														{
-															c / 5
-														}
-														{"秒"}
-														</>
-
-													},
-													None => html!{"Not set start"}
-												}
-											}
-										</span>
-										<span class="text-3xl">
-											{
-												match self.cost {
-													Some(c) =>html!{
-														<>
-														{
-															c / 3
-														}
-														{"m"}
-														</>
-
-													},
-													None => html!{"Not set start"}
-												}
-											}
-										</span>
-									</h2>
-								</button>
-							</section>
-						</div>
-					},
-					Page::Detail => html! {
-					<div class="fixed" style="bottom: 37%; z-index: 100;">
-						<section class="text-center w-screen absolute" style="background-color: #3c3e5c; border-top-left-radius: 3rem; border-top-right-radius: 3rem;">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="rounded-2xl bg-red-200 mx-auto border-4 -my-24 w-48 h-48">
-								<path fill-rule="evenodd" d="M20.322.75a10.75 10.75 0 00-7.373 2.926l-1.304 1.23A23.743 23.743 0 0010.103 6.5H5.066a1.75 1.75 0 00-1.5.85l-2.71 4.514a.75.75 0 00.49 1.12l4.571.963c.039.049.082.096.129.14L8.04 15.96l1.872 1.994c.044.047.091.09.14.129l.963 4.572a.75.75 0 001.12.488l4.514-2.709a1.75 1.75 0 00.85-1.5v-5.038a23.741 23.741 0 001.596-1.542l1.228-1.304a10.75 10.75 0 002.925-7.374V2.499A1.75 1.75 0 0021.498.75h-1.177zM16 15.112c-.333.248-.672.487-1.018.718l-3.393 2.262.678 3.223 3.612-2.167a.25.25 0 00.121-.214v-3.822zm-10.092-2.7L8.17 9.017c.23-.346.47-.685.717-1.017H5.066a.25.25 0 00-.214.121l-2.167 3.612 3.223.679zm8.07-7.644a9.25 9.25 0 016.344-2.518h1.177a.25.25 0 01.25.25v1.176a9.25 9.25 0 01-2.517 6.346l-1.228 1.303a22.248 22.248 0 01-3.854 3.257l-3.288 2.192-1.743-1.858a.764.764 0 00-.034-.034l-1.859-1.744 2.193-3.29a22.248 22.248 0 013.255-3.851l1.304-1.23zM17.5 8a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm-11 13c.9-.9.9-2.6 0-3.5-.9-.9-2.6-.9-3.5 0-1.209 1.209-1.445 3.901-1.49 4.743a.232.232 0 00.247.247c.842-.045 3.534-.281 4.743-1.49z"/>
-							</svg>
-							<br/>
-							<div class="mt-24 text-white mr-10">
-								<span  class="text-5xl">
-									{self.place_info.place_name.clone()}
-								</span>
-								<br/>
-								<br/>
-								<span>
-								{self.place_info.description.clone()}
-								</span>
-								<br/>
-								<h2 class="float-right">
-									<span class="text-3xl" style="color: hsl(141, 53%, 53%);">
-										{
-											match self.cost {
-												Some(c) =>html!{
-													<>
-													{
-														c / 5
-													}
-													{"秒"}
-													</>
-
-												},
-												None => html!{"Not set start"}
-											}
-										}
-									</span>
-									<br/>
-									<span class="text-3xl">
-										{
-											match self.cost {
-												Some(c) =>html!{
-													<>
-													{
-														c / 3
-													}
-													{"m"}
-													</>
-
-												},
-												None => html!{"Not set start"}
-											}
-										}
-									</span>
-									<br/>
-									<div class="text-white text-3xl">
-									{"待ち時間: "}
-									{
-										self.place_info.waitting_time_minute
-									}
-									{"分"}
-									</div>	
-								</h2>
 							</div>
-							<br/>
-							<br/>
-							<br/>
-							<button
-								onclick=self.link.callback(|_| Msg::AddGoal)
-								class="text-white text-4xl rounded-full"
-								style="background-color: #02c695; width: 25rem; height: 4ex;"
-							>
-								{"Get Direction"}
-							</button>
-						</section>
-					</div>
-
+						</div>			
 					},
 				}
 			}

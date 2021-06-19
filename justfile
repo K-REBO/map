@@ -1,5 +1,5 @@
 build:
-	wasm-pack build --target web --out-name wasm --out-dir ./static
+	wasm-pack build --target web --out-name wasm --out-dir ./static && cp css/output.css static
 serve:
 	miniserve static/ --index index.html
 css:

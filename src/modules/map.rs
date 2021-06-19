@@ -90,7 +90,6 @@ impl Map {
 			return get_node(x, y);
 		}
 	}
-
 }
 
 #[wasm_bindgen(module = "/src/js/canvas.js")]
@@ -104,5 +103,5 @@ extern "C" {
 }
 #[wasm_bindgen(module = "/src/js/utils.js")]
 extern "C" {
-	fn get_node(x:i32, y:i32) -> Vec<u16>;
+	fn get_node(x: i32, y: i32) -> Vec<u16>;
 }
